@@ -291,7 +291,7 @@ Dimana:
 - TP (*True Positive*), jumlah kejadian positif yang diprediksi dengan benar.
 - FP (*False Positive*), jumlah kejadian positif yang diprediksi dengan salah.
 
-Berdasarkan hasil yang terdapat pada tahap Model and Result dapat dilihat bahwasanya besar presisi jika dihitung adalah 9/10 untuk rekomendasi Top-10. Ini menunjukan sistem mampu memberikan rekomendasi sesuai dengan skintype, category, dan ingredient.
+Berdasarkan hasil yang terdapat pada tahap Model and Result dapat dilihat bahwasanya besar presisi jika dihitung adalah 9/10 untuk rekomendasi Top-10. Ini menunjukan sistem mampu memberikan rekomendasi sesuai dengan Name,price,rating dan corpus.
 
 
 ### 2. Collaborative Filtering
