@@ -35,27 +35,18 @@ Dataset yang digunakan untuk membuat sistem rekomendasi smartphone pada responde
 ### Keterangan Variabel
 Dataset ini memiliki 5 variabel dengan keterangan sebagai berikut.
 
-| **Nama Variabel** | **Tipe Data**    | **Deskripsi**                                                                                                                                                             |
-| ----------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`            | `String`         | Nama lengkap smartphone, termasuk merk, model, varian warna, dan kapasitas memori.                                                                                        |
-| `ratings`         | `Float`          | Nilai rata-rata ulasan pengguna (range 1–5), menunjukkan tingkat kepuasan terhadap produk.                                                                                |
-| `price`           | `Integer/String` | Harga smartphone. Perlu dibersihkan dari simbol mata uang seperti `₹` untuk dianalisis secara numerik.                                                                    |
-| `imgURL`          | `String (URL)`   | URL gambar produk dari e-commerce. Umumnya digunakan untuk visualisasi atau aplikasi berbasis antarmuka.                                                                  |
-| `corpus`          | `String`         | Deskripsi gabungan dari spesifikasi teknis: RAM, ROM, sistem operasi, prosesor, dan fitur lainnya. Digunakan sebagai fitur untuk pemrosesan teks atau sistem rekomendasi. |
+| **Nama Variabel** | **Tipe Data**  | **Deskripsi**                                                                             |
+| ----------------- | -------------- | ----------------------------------------------------------------------------------------- |
+| `name`            | String         | Nama lengkap smartphone beserta varian warna dan kapasitas penyimpanan.                   |
+| `ratings`         | Float          | Nilai rating pengguna terhadap smartphone, biasanya dalam skala 1 hingga 5.               |
+| `price`           | Integer/String | Harga smartphone. Perlu dibersihkan jika menggunakan simbol mata uang (misalnya `₹`).     |
+| `imgURL`          | String (URL)   | Tautan gambar produk dari situs e-commerce.                                               |
+| `corpus`          | String         | Deskripsi spesifikasi teknis (storage, RAM, OS, prosesor, kamera, dll) dalam bentuk teks. |
+| `user_id`         | String         | ID unik pengguna atau penanda entri smartphone di dataset.                                |
 
-![menampilkan jumlah dataset](https://github.com/user-attachments/assets/b7ea689e-7906-4dba-a566-2aa87f6586cf)
+![menampilkan jumlah dataset](https://github.com/user-attachments/assets/69cb56a4-585e-4ebb-9a51-42b15e4325d9)
 
-Dapat dilihat bahwa data yang digunakan adalah sebanyak 2546 data dengan 5 fitur.
-
-#### memeriksa data duplikasi
-![cek data duplicat](https://github.com/user-attachments/assets/74f14e89-b30c-4a1d-9756-1fe1f87fd5c2)
-
-Dari Hasil diatas terlihat bahwa ada 1 data yang mengalami duplikasi yaitu di baris ke 1696 dengan name OPPO Reno 10 5G.
-
-#### memeriksa missing value
-![mengecek missing velue](https://github.com/user-attachments/assets/3ad1e5fd-7cde-4160-8249-d28e6944e45b)
-
-Dari hasil diatas diketahui bahwa terdapat missing velue di 7 kolom yaitu corpus, storage_ram, os_processor, camera, display, network, dan battery.saya uraikan corpus untuk menangani jika terjadi data missing value dri tiap kriteria yang ada di corpus.
+Dapat dilihat bahwa data yang digunakan adalah sebanyak 2546 data dengan 6 fitur.
 
 ### Statistik Data
 Selanjutnya akan ditampilkan statistik data numerikal secara umum:
@@ -82,6 +73,16 @@ Tabel di atas memberikan informasi statistik pada masing-masing kolom, antara la
 
 Penjelasan:
 Dari tabel Data ratings menunjukkan distribusi yang cukup sempit dan condong ke arah nilai tinggi, yang mengindikasikan bahwa mayoritas pengguna memberikan penilaian positif terhadap item yang ada. Hal ini bisa menunjukkan kualitas produk/jasa yang baik atau bisa juga bias penilaian (rating bias).
+
+#### memeriksa data duplikasi
+![data duplikasi](https://github.com/user-attachments/assets/fec138a2-4e38-4c9e-9809-e57f7739e403)
+
+Dari Hasil diatas terlihat bahwa tidak ada data yang terduplikasi.
+
+#### memeriksa missing value
+![mengecek missing velue](https://github.com/user-attachments/assets/3ad1e5fd-7cde-4160-8249-d28e6944e45b)
+
+Dari hasil diatas diketahui bahwa terdapat missing velue di 7 kolom yaitu corpus, storage_ram, os_processor, camera, display, network, dan battery.saya uraikan corpus untuk menangani jika terjadi data missing value dri tiap kriteria yang ada di corpus.
 
 
 ## Exploratory Data Analysis (EDA)
@@ -156,11 +157,6 @@ Fitur-fitur teknis secara umum memiliki korelasi yang lebih jelas terhadap ratin
 
 ## Data Preparation
 ### Data Cleaning
-#### Menangani data duplikat
-![menangani data dupliat](https://github.com/user-attachments/assets/4011031c-7bb2-4e37-828e-528ac00f9b7b)
-
-Dari hasil diatas terlihat bahwa sudah dilakukan perbaikan dalam menangani data yang terduplikat.
-
 #### Menangani missing velue
 ![menangani missing velue](https://github.com/user-attachments/assets/b6c942ad-fa58-4288-9d91-90217a441ad2)
 
@@ -176,7 +172,7 @@ Dari hasil diatas menunjukan bahwa kolom price dengan simbol rupe dan koma dihap
 
 agar lebih mudah mengerti dataset maka kolom corpus dipisah menjadi 6 kolom yang terdiri dari storage_ram, os_processor, camera, display, network, dan battery tujuannya agar mudah mengecek apakah terjadi missing value, duplikasi, dan memudahkan visualisasi.
 
-### Perbedaan Antara Content-based filtering dengan Collaborative filtering
+## Data Preparation
 Karena berbeda antara content-based filtering dengan collaborative filtering, maka data preparation dari kedua approach tersebut akan dilakukan secara masing-masing. Teknik Data preparation yang dilakukan terdiri dari:
 - TF-IDF Vectorizer 
 - Encoding Data User Rating
@@ -274,9 +270,13 @@ Pada python, kita akan menggunakan  `cosine_similarity` untuk mendapatkan nilai 
 | 138   | SAMSUNG Galaxy F42 5G (Matte Black, 128 GB)     | 20999.0 | 4.3     | SAMSUNG Galaxy F42 5G (Matte Black, 128 GB) \| \$20999.0 \| Rating: 4.3  |
 | 145   | SAMSUNG Galaxy A73 5G (Awesome Mint, 256 GB)    | 20537.0 | 4.2     | SAMSUNG Galaxy A73 5G (Awesome Mint, 256 GB) \| \$20537.0 \| Rating: 4.2 |
 
+penjelasan:
+
+dari hasil rekomendasi berdasarkan name, price, ratings, dan corpus berhasil memberikan rekomendasi sesuai sebanyak 9 rekomendasi dan tidak sesuai 1 rekomendasi.
+
 ### 2. Collaborative Filtering
 
-Collaborative Filtering menggunakan deep learning, tepatnya embedding layer untuk membuat model deep learning. Embedding layer merupakan tipe layer pada deep learning yang digunakan untuk mentransformasikan data kategorikal menjadi vektor dengan nilai kontinu. Pada python, kita menggunakan `tensorflow.keras.layers Embedding` untuk membentuk embedding layer. Embedding Layer memiliki kelebihan seperti mengurangi kompleksitas model, dapat digunakan di berbagai macam algoritma deep learning, dan menangkap hubungan semantic pada data. Meski demikian, embedding layer juga memiliki beberapa kelemahan, seperti membutuhkan data yang banyak, sensitif terhadap hyperparameter, dan cold start problem. Setelah model dibentuk dan dilatih, diperoleh hasil `root_mean_squared_error: 0.0037` untuk data training dan `val_root_mean_squared_error:  0.2310` untuk data testing. Nilai tersebut sudah bagus untuk digunakan dalam sistem rekomendasi, sehingga dapat dibentuk sistem rekomendasi berdasarkan model tersebut. Selanjutnya, akan diuji sistem rekomendasi ini untuk menampilkan top 10 rekomendasi smartphone berdasarkan  name, price, rating dan corpus. Diperoleh hasil berikut.
+Collaborative Filtering menggunakan deep learning, tepatnya embedding layer untuk membuat model deep learning. Embedding layer merupakan tipe layer pada deep learning yang digunakan untuk mentransformasikan data kategorikal menjadi vektor dengan nilai kontinu. Pada python, kita menggunakan `tensorflow.keras.layers Embedding` untuk membentuk embedding layer. Embedding Layer memiliki kelebihan seperti mengurangi kompleksitas model, dapat digunakan di berbagai macam algoritma deep learning, dan menangkap hubungan semantic pada data. Meski demikian, embedding layer juga memiliki beberapa kelemahan, seperti membutuhkan data yang banyak, sensitif terhadap hyperparameter, dan cold start problem. Setelah model dibentuk dan dilatih, diperoleh hasil `root_mean_squared_error: 0.0029` untuk data training dan `val_root_mean_squared_error:  0.2307` untuk data testing. Nilai tersebut sudah bagus untuk digunakan dalam sistem rekomendasi, sehingga dapat dibentuk sistem rekomendasi berdasarkan model tersebut. Selanjutnya, akan diuji sistem rekomendasi ini untuk menampilkan top 10 rekomendasi smartphone berdasarkan  name, price, rating dan corpus. Diperoleh hasil berikut.
 
 `recommend_tracks_based_on_track_name(('OPPO A78 5G (Glowing Black, 128 GB) | $18142.0 | Rating: 4.3'), top_n=10)`
 
@@ -328,9 +328,9 @@ Jika nilai prediksi sangat mendekati nilai sesungguhnya, maka nilai dari $(y_i -
 
 #### Penerapan Evaluasi Model dengan RMSE
 
-Pada collaborative filtering, setelah melatih model sebanyak 35 epoch, diperoleh hasil `RMSE = 0.6955` untuk data training dan `RMSE = 0.2310` untuk data testing. Jika dilihat menggunakan grafik, diperoleh plot sebagai berikut.
+Pada collaborative filtering, setelah melatih model sebanyak 50 epoch, diperoleh hasil `RMSE = 0.6952` untuk data training dan `RMSE = 0.2307` untuk data testing. Jika dilihat menggunakan grafik, diperoleh plot sebagai berikut.
 
-![MODEL](https://github.com/user-attachments/assets/24557e53-adc2-47b3-a1b8-d26d9e16fae6)
+![modelling](https://github.com/user-attachments/assets/7c481718-3ab5-49ac-b1aa-74384a177d12)
 
 Model menunjukkan performa yang sangat baik pada data pelatihan dengan kesalahan prediksi (RMSE) yang terus menurun. Namun, performa pada data validasi cenderung stagnan, menandakan bahwa model belum mampu melakukan generalisasi dengan baik ke data yang belum pernah dilihat sebelumnya. Diperlukan penyesuaian agar model tidak hanya unggul di pelatihan, tetapi juga akurat saat diuji dengan data baru.
 
