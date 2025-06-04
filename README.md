@@ -87,7 +87,7 @@ Dari hasil diatas diketahui bahwa terdapat missing velue di 7 kolom yaitu corpus
 
 ## Exploratory Data Analysis (EDA)
 ### Persebaran penggunaan smartphone berdasarkan nama smarphone dan rentang harga
-![EDA1](https://github.com/user-attachments/assets/8bbcfdd7-6510-4bd0-ae42-85055d5ed6ca)
+![EDA](https://github.com/user-attachments/assets/b42251ad-a398-4be6-9cf1-1b9a81fea38e)
 
 Kesimpulan:
 - Brand dan harga adalah dua faktor utama dalam keputusan pembelian smartphone.
@@ -156,23 +156,21 @@ Fitur-fitur teknis secara umum memiliki korelasi yang lebih jelas terhadap ratin
 
 
 ## Data Preparation
-### Data Cleaning
 #### Menangani missing velue
 ![menangani missing velue](https://github.com/user-attachments/assets/b6c942ad-fa58-4288-9d91-90217a441ad2)
 
 Dari Hasil diatas terlihat bahwa sudah tidak ada missing velue karena sudah ditangani.
 
-### Pembersihan Kolom Price
+#### Pembersihan Kolom Price
 ![menghapus price](https://github.com/user-attachments/assets/136362e5-aa23-40f4-adbe-06a665c41f8b)
 
 Dari hasil diatas menunjukan bahwa kolom price dengan simbol rupe dan koma dihapus dan mengonversi menjadi float.
 
-### Extract Kolom Corpus
+#### Extract Kolom Corpus
 ![Ekstract kolom corpus](https://github.com/user-attachments/assets/f074c2d9-24dd-4c97-bf3d-82659de67f3b)
 
 agar lebih mudah mengerti dataset maka kolom corpus dipisah menjadi 6 kolom yang terdiri dari storage_ram, os_processor, camera, display, network, dan battery tujuannya agar mudah mengecek apakah terjadi missing value, duplikasi, dan memudahkan visualisasi.
 
-## Data Preparation
 Karena berbeda antara content-based filtering dengan collaborative filtering, maka data preparation dari kedua approach tersebut akan dilakukan secara masing-masing. Teknik Data preparation yang dilakukan terdiri dari:
 - TF-IDF Vectorizer 
 - Encoding Data User Rating
@@ -272,26 +270,26 @@ Pada python, kita akan menggunakan  `cosine_similarity` untuk mendapatkan nilai 
 
 penjelasan:
 
-dari hasil rekomendasi berdasarkan name, price, ratings, dan corpus berhasil memberikan rekomendasi sesuai sebanyak 9 rekomendasi dan tidak sesuai 1 rekomendasi.
+Hasil dari code diatas menunjukan bahwa true positive: 9 dan precision = 0.90 yang artinya dari hasil rekomendasi berdasarkan name, price, ratings, dan corpus berhasil memberikan rekomendasi sesuai sebanyak 9 rekomendasi dan tidak sesuai 1 rekomendasi.
 
 ### 2. Collaborative Filtering
 
-Collaborative Filtering menggunakan deep learning, tepatnya embedding layer untuk membuat model deep learning. Embedding layer merupakan tipe layer pada deep learning yang digunakan untuk mentransformasikan data kategorikal menjadi vektor dengan nilai kontinu. Pada python, kita menggunakan `tensorflow.keras.layers Embedding` untuk membentuk embedding layer. Embedding Layer memiliki kelebihan seperti mengurangi kompleksitas model, dapat digunakan di berbagai macam algoritma deep learning, dan menangkap hubungan semantic pada data. Meski demikian, embedding layer juga memiliki beberapa kelemahan, seperti membutuhkan data yang banyak, sensitif terhadap hyperparameter, dan cold start problem. Setelah model dibentuk dan dilatih, diperoleh hasil `root_mean_squared_error: 0.0029` untuk data training dan `val_root_mean_squared_error:  0.2307` untuk data testing. Nilai tersebut sudah bagus untuk digunakan dalam sistem rekomendasi, sehingga dapat dibentuk sistem rekomendasi berdasarkan model tersebut. Selanjutnya, akan diuji sistem rekomendasi ini untuk menampilkan top 10 rekomendasi smartphone berdasarkan  name, price, rating dan corpus. Diperoleh hasil berikut.
+Collaborative Filtering menggunakan deep learning, tepatnya embedding layer untuk membuat model deep learning. Embedding layer merupakan tipe layer pada deep learning yang digunakan untuk mentransformasikan data kategorikal menjadi vektor dengan nilai kontinu. Pada python, kita menggunakan `tensorflow.keras.layers Embedding` untuk membentuk embedding layer. Embedding Layer memiliki kelebihan seperti mengurangi kompleksitas model, dapat digunakan di berbagai macam algoritma deep learning, dan menangkap hubungan semantic pada data. Meski demikian, embedding layer juga memiliki beberapa kelemahan, seperti membutuhkan data yang banyak, sensitif terhadap hyperparameter, dan cold start problem. Setelah model dibentuk dan dilatih, diperoleh hasil `root_mean_squared_error:0.0029` untuk data training dan `val_root_mean_squared_error:  0.2308` untuk data testing. Nilai tersebut sudah bagus untuk digunakan dalam sistem rekomendasi, sehingga dapat dibentuk sistem rekomendasi berdasarkan model tersebut. Selanjutnya, akan diuji sistem rekomendasi ini untuk menampilkan top 10 rekomendasi smartphone berdasarkan  name, price, rating dan corpus. Diperoleh hasil berikut.
 
 `recommend_tracks_based_on_track_name(('OPPO A78 5G (Glowing Black, 128 GB) | $18142.0 | Rating: 4.3'), top_n=10)`
 
 Rekomendasi berdasarkan track dengan brand dan produk: 'OPPO A78 5G (Glowing Black, 128 GB) | $18142.0 | Rating: 4.3'
 10 Rekomendasi smartphone yang cocok untuk kamu:
-1. produk OPPO A78 5G (Glowing Black, 128 GB) | $18142.0 | Rating: 4.3 dengan spesifikasi Storage128 GBRAM8  SystemAndroidProcessor Speed2 13MP 5G Capacity5000 Display Size16.66 cm (6.56 inch)Resolution720 x 1600 Pixels dan rating 4.3
-2. produk Redmi K20 (Glacier Blue, 128 GB) | $24999.0 | Rating: 4.5 dengan spesifikasi Storage128 GBRAM6  SystemAndroid Pie 9.0Processor TypeQualcomm Snapdragon 730Processor Speed2.2 48MP 13MP 8MP 48MP 13MP 8MP 20MP 20MP 3G Capacity4000 Display Size16.23 cm (6.39 inch)Resolution2340 x 1080 pixelsResolution TypeFull HD+GPUAdreno 618Display TypeAMOLEDDisplay ColorsContrast Ratio - 60000:1, NTSC Ratio - 103.8% dan rating 4.5
-3. produk OnePlus 7 (Mirror Grey, 128 GB) | $22990.0 | Rating: 4.6 dengan spesifikasi Storage128 GBRAM6  SystemAndroid Pie OxygenProcessor Speed2.8 16MP 4G Capacity3700 Display Size16.28 cm (6.41 inch)Resolution2340 x 1080 Pixels dan rating 4.6
-4. produk REDMI Note 10S (Cosmic Purple, 128 GB) | $17488.0 | Rating: 4.4 dengan spesifikasi Storage128 GBRAM6 GBExpandable Storage512GB  SystemAndroid 11Processor TypeMediatek Helio G95Processor Speed2.05 64MP 8MP 2MP 2MP 64MP 8MP 2MP 2MP 64MP 13MP 13MP 4G Capacity5000 Display Size16.33 cm (6.43 inch)Resolution2400 x 1080 PixelsResolution TypeFull HD+ Super AMOLED DisplayGPUARM Mali G76Display TypeFHD+ Super AMOLEDHD Game SupportYesDisplay Colors16MOther Display FeaturesContrast Ratio: 4,500,000:1, Color Gamut: DCI-P3, Brightness: HBM 700 nits,1100 nits Peak Brightness, 8-Bit Color, Reading Mode 3.0, Sunlight Mode 2.0, Low Blue Light Certified by SGS dan rating 4.4
-5. produk vivo Y50 (Pearl White, 128 GB) | $19949.0 | Rating: 4.4 dengan spesifikasi Storage128 GBRAM8 GBExpandable Storage256GB  SystemAndroid 10Processor TypeQualcomm Snapdragon 665Processor Speed2 13MP 8MP 2MP 2MP 16MP 4G Capacity5000 Display Size16.59 cm (6.53 inch)Resolution2340 x 1080 PixelsGPUAdreno GPU 610Display TypeFHD+ IPS DisplayOther Display Features90.7% Screen-to-body Ratio dan rating 4.4
-6. produk realme 11 Pro 5G (Sunrise Beige, 128 GB) | $23999.0 | Rating: 4.3 dengan spesifikasi Storage128 GBRAM8  SystemAndroid 13Processor TypeDimensity 7050Processor Speed2.6 100MP 2MP 100MP 2MP 16MP 16MP 5G Capacity5000 Display Size17.02 cm (6.7 inch)Resolution2412 x 1080 PixelsResolution TypeFull HD+GPUMali-G68 MC4Display TypeFull HD+ OLED DisplayDisplay Colors10 Bit ColorOther Display FeaturesScreen-to-Body Ratio: 93.6%, Color Saturation: DCI-P3 100%, Aspect Ratio: 20.1:9, Contrast Ratio: 5000000:1, Sunshine Screen, Brightness: 500 nits, Peak Brightness: 950 nits, Refresh Ratio: 60 Hz/ 90 Hz/ 120 Hz, 360 Hz Touch Sampling Rate, Dimming Mode: ?90nit: PWM2160HZ, >90nit: DC dan rating 4.3
-7. produk REDMI 10 (Shadow Black, 64 GB) | $9999.0 | Rating: 4.3 dengan spesifikasi Storage64 GBRAM4 GBExpandable Storage1TB  SystemAndroid 11Processor TypeQualcomm Snapdragon 680Processor Speed2.4 50MP 2MP 50MP 2MP 5MP 5MP 4G Capacity6000 Display Size17.02 cm (6.7 inch)Resolution1650 x 720 PixelsResolution TypeHD+GPUQualcomm Adreno 610Display TypeHD+ IPS LCDHD Game SupportYesOther Display Features120Hz Touch Sampling Rate, Screen-to-Body Ratio: 90.5%, NTSC Colour Gamut Coverage: 70%, Aspect Ratio: 20.6:9, Contrast Ratio: 1500:1, Brightness: 400nits dan rating 4.3
-8. produk realme 9 5G (Meteor Black, 64 GB) | $13499.0 | Rating: 4.5 dengan spesifikasi Storage64 GBRAM4 GBExpandable Storage1TB  SystemAndroid 11Processor TypeMediatek Dimensity 810Processor Speed2.4 48MP 2MP 2MP 48MP 2MP 2MP 16MP 16MP 5G Capacity5000 Display Size16.51 cm (6.5 inch)Resolution2400 x 1080 PixelsResolution TypeFull HD+GPUARM Mali-G57 MC2Display TypeFull HD+ LCD (LTPS)Display Colors16.7MOther Display Features90 Hz Refresh Rate, Aspect Ratio: 20:9, Screen-to-Body Ratio: 90.50%, Screen Contrast: 1500:1, Brightness: 480 nit (Maximum 600 nit (Sunlight)), Color Saturation: 96% NTSC dan rating 4.5
-9. produk realme 10 Pro 5G (Nebula Blue, 128 GB) | $18999.0 | Rating: 4.3 dengan spesifikasi Storage128 GBRAM6 GBExpandable Storage1TB  SystemAndroid 13Processor TypeQualcomm Snapdragon 695 5GProcessor Speed2.2 108MP 2MP 2MP 16MP 16MP 5G Capacity5000 Display Size17.07 cm (6.72 inch)Resolution2400 x 1080 PixelResolution TypeFull HD+GPUQualcomm Adreno A619Display TypeFull HD+ LCD DisplayDisplay Colors16.7MOther Display FeaturesRefresh Rate: 120 Hz, Aspect Ratio: 20:9, Screen-to-Body Ratio: 93.76%, Screen Contrast: 1400:1, Maximum Brightness: 600 nit, Color Saturation: 95% NTSC, Sunlight Screen Support, Oleophophic Coating dan rating 4.3
-10. produk SAMSUNG Galaxy S23 5G (Green, 128 GB) | $9463.0 | Rating: 4.5 dengan spesifikasi Storage128 GBRAM8  SystemAndroid 13Processor TypeQualcomm Snapdragon 8 Gen 2Processor Speed3.36 50MP 10MP 12MP 12MP 5G Capacity3900 Display Size15.49 cm (6.1 inch)Resolution2340 x 1080 PixelsResolution TypeFull HD+GPUQualcomm Adreno 740Display TypeFull HD+ Dynamic AMOLED 2XHD Game SupportYesOther Display FeaturesAdaptive Refresh Rate: 48 Hz - 120Hz dan rating 4.5
+ produk OPPO A78 5G (Glowing Black, 128 GB) | $18142.0 | Rating: 4.3 dengan spesifikasi Storage128 GBRAM8  SystemAndroidProcessor Speed2 13MP 5G Capacity5000 Display Size16.66 cm (6.56 inch)Resolution720 x 1600 Pixels dan rating 4.3
+ produk realme C33 2023 (Aqua Blue, 64 GB) | $9999.0 | Rating: 4.4 dengan spesifikasi Storage64 GBRAM4 GBExpandable Storage1TB  SystemAndroid 12Processor TypeUnisoc T612Processor Speed1.82 50MP 3MP 50MP 5MP 3MP 50MP 5MP 5MP 4G Capacity5000 Display Size16.51 cm (6.5 inch)Resolution1600 x 720 PixelResolution TypeHD+GPUARM Mali G57Display TypeHD+ LCD DisplayDisplay Colors16.7MOther Display FeaturesRefresh Rate: 60 Hz, Aspect Ratio: 20:9, Screen-to-Body Ratio: 88.7%, Screen Contrast: 1500:1, Maximum Brightness: 400 nits, Color Saturation: 70%, Sunlight Screen Support dan rating 4.4
+ produk vivo V27 Pro 5G (Magic Blue, 256 GB) | $22537.0 | Rating: 4.5 dengan spesifikasi Storage256 GBRAM12  SystemAndroid 13Processor TypeMediatek Dimensity 8200Processor Speed3.1 50MP 8MP 2MP 50MP 8MP 2MP 50MP 50MP 5G Capacity4600 Display Size17.22 cm (6.78 inch)Resolution2400 x 1080 PixelsResolution TypeFull HD+Display TypeFull HD+ AMOLED DisplayOther Display Features120 Hz 3D Curved Display dan rating 4.5
+ produk Redmi Note 7 Pro (Moonlight White, 64 GB) | $15999.0 | Rating: 4.5 dengan spesifikasi Storage64 GBRAM4 GBExpandable Storage256GB  SystemAndroid Pie 9Processor TypeQualcomm Snapdragon 675Processor Speed2 48MP 5MP 48MP 5MP 13MP 3G Capacity4000 Display Size16.0 cm (6.3 inch)Resolution2340 x 1080 pixelsResolution TypeFull HD+GPUAdreno 612Display TypeIPS (In-cell), RDOther Display FeaturesContrast Ratio - 1500:1, NTSC Ratio - 81.41%, 2.5D Glass (In-front), Corning Gorilla Glass 5 (Front and Back), Dot Notch Display dan rating 4.5
+ produk vivo Y73 (Roman Black, 128 GB) | $19795.0 | Rating: 4.5 dengan spesifikasi Storage128 GBRAM8  SystemAndroid 11Processor TypeMediaTek Helio G95Processor Speed900 64MP 2MP 2MP 64MP 2MP 2MP 16MP 16MP 4G Capacity4000 Display Size16.36 cm (6.44 inch)Resolution2400 × 1080 PixelsResolution TypeFull HD+GPUArm Mali-G76 MC4Display TypeFull HD+ E1 AMOLED DisplayOther Display Features20:09 Aspect Ratio, 90.37% Screen-to-body Ratio, Ultra Slim AG Glass dan rating 4.5
+ produk vivo V17 (Glacier ice white, 128 GB) | $27990.0 | Rating: 4.5 dengan spesifikasi Storage128 GBRAM8 GBExpandable Storage256GB  SystemAndroid Pie 9Processor TypeQualcomm Snapdragon 675AIEProcessor Speed2 48MP 8MP 2MP 2MP 48MP 48MP 8MP 2MP 2MP 32MP 32MP 4G Capacity4500 Display Size16.36 cm (6.44 inch)Resolution2400 x 1080 PixelsResolution TypeFull HD+GPUAdreno 612Display TypeE3 Super AMOLEDDisplay Colors16MOther Display FeaturesBezel: 1.85mm (Side), 3.51mm (Bottom), 2.08mm (Top), Screen to Body Ratio: 91.38% dan rating 4.5
+ produk OPPO A37f (Grey, 16 GB) | $9990.0 | Rating: 4.5 dengan spesifikasi Storage16 GBRAM2 GBExpandable Storage128GB  SystemAndroid Lollipop Color OS 3.0 based on Android 5.1Processor TypeQualcomm Snapdragon 410 Quad Core 1.2GHzProcessor Speed1.2 8MP 5MP 3G Capacity2630 Display Size12.7 cm (5 inch)Resolution1280 x 720 PixelsResolution TypeHDGPUAdreno A306Display TypeIPS TFT dan rating 4.5
+ produk OPPO A53s 5G (Ink Black, 128 GB) | $15990.0 | Rating: 4.4 dengan spesifikasi Storage128 GBRAM6 GBExpandable Storage1TB  SystemAndroid 11Processor TypeMediaTek Dimensity 700Processor Speed2.2 13MP 2MP 2MP 13MP 2MP 2MP 8MP 8MP 5G Capacity5000 Display Size16.56 cm (6.52 inch)Resolution1600 x 720 PixelsResolution TypeHD+GPUMali-G57 MC2 (at 730 MHz)Display TypeHD+ DisplayDisplay Colors16.7MOther Display Features60 Hz Refresh Rate, 88.7% Screen-to-Body Ratio, Ultra Clear Eyecare Diplay dan rating 4.4
+ produk Redmi 3S (Silver, 16 GB) | $6999.0 | Rating: 4.3 dengan spesifikasi Storage16 GBRAM2 GBExpandable Storage128GB  SystemAndroid Marshmallow 6.0.1Processor TypeQualcomm Snapdragon 430 64-bit Octa Core 1.4GHzProcessor Speed1.4 13MP 5MP 3G Capacity4100 Display Size12.7 cm (5 inch)Resolution1280 x 720 PixelsResolution TypeHDGPUAdreno 505Other Display FeaturesIPS Display dan rating 4.3
+ produk OPPO A31 (Fantasy White, 128 GB) | $12799.0 | Rating: 4.3 dengan spesifikasi Storage128 GBRAM6 GBExpandable Storage256GB  SystemAndroid Pie 9Processor TypeMediaTek Helio P35 Octa CoreProcessor Speed2.3 12MP 2MP 2MP 8MP 4G Capacity4230 Display Size16.51 cm (6.5 inch)Resolution1600 x 720$$PixelsResolution TypeHD+GPUIMG GE8320Display TypeHD+ TFT-LCD DisplayDisplay Colors16MOther Display FeaturesCorning Gorilla Glass 3 Protection, 60 Hz Screen Refresh Rate, 10 Points Multi-touch Display, 120 Hz Touch Sampling Rate, 480 nit Maximum Screen Brightness, 70% Color Saturation, 1500:1 Color Contrast, 70% NTSC Color Gamut, 89% Screen Ratio, TÜV Rheinland Eye Comfort Certification, No Stroboscopic Eye Protection, Screen Proportion: 20:9 dan rating 4.3
 
 ## Evaluation
 
@@ -306,7 +304,12 @@ Dimana:
 - TP (*True Positive*), jumlah kejadian positif yang diprediksi dengan benar.
 - FP (*False Positive*), jumlah kejadian positif yang diprediksi dengan salah.
 
-Berdasarkan hasil yang terdapat pada tahap Model and Result dapat dilihat bahwasanya besar presisi jika dihitung adalah 9/10 untuk rekomendasi Top-10. Ini menunjukan sistem mampu memberikan rekomendasi sesuai dengan name, price,rating dan corpus.
+#### Penerapan evaluasi Model dengan Precision 
+![model conten based](https://github.com/user-attachments/assets/6a8632cd-c85d-4105-8b93-a62a5ba3bd61)
+
+penjelasan:
+
+Hasil dari code diatas menunjukan bahwa true positive: 9 dan precision = 0.90 yang artinya dari hasil rekomendasi berdasarkan name, price, ratings, dan corpus berhasil memberikan rekomendasi sesuai sebanyak 9 rekomendasi dan tidak sesuai 1 rekomendasi.
 
 
 ### 2. Collaborative Filtering
@@ -328,7 +331,7 @@ Jika nilai prediksi sangat mendekati nilai sesungguhnya, maka nilai dari $(y_i -
 
 #### Penerapan Evaluasi Model dengan RMSE
 
-Pada collaborative filtering, setelah melatih model sebanyak 50 epoch, diperoleh hasil `RMSE = 0.6952` untuk data training dan `RMSE = 0.2307` untuk data testing. Jika dilihat menggunakan grafik, diperoleh plot sebagai berikut.
+Pada collaborative filtering, setelah melatih model sebanyak 50 epoch, diperoleh hasil `RMSE = 0.0029` untuk data training dan `RMSE = 0.2308` untuk data testing. Jika dilihat menggunakan grafik, diperoleh plot sebagai berikut.
 
 ![modelling](https://github.com/user-attachments/assets/7c481718-3ab5-49ac-b1aa-74384a177d12)
 
