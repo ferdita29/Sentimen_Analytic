@@ -43,6 +43,20 @@ Dataset ini memiliki 5 variabel dengan keterangan sebagai berikut.
 | `imgURL`          | `String (URL)`   | URL gambar produk dari e-commerce. Umumnya digunakan untuk visualisasi atau aplikasi berbasis antarmuka.                                                                  |
 | `corpus`          | `String`         | Deskripsi gabungan dari spesifikasi teknis: RAM, ROM, sistem operasi, prosesor, dan fitur lainnya. Digunakan sebagai fitur untuk pemrosesan teks atau sistem rekomendasi. |
 
+![menampilkan jumlah dataset](https://github.com/user-attachments/assets/b7ea689e-7906-4dba-a566-2aa87f6586cf)
+
+Dapat dilihat bahwa data yang digunakan adalah sebanyak 2546 data dengan 5 fitur.
+
+#### memeriksa data duplikasi
+![cek data duplicat](https://github.com/user-attachments/assets/74f14e89-b30c-4a1d-9756-1fe1f87fd5c2)
+
+Dari Hasil diatas terlihat bahwa ada 1 data yang mengalami duplikasi yaitu di baris ke 1696 dengan name OPPO Reno 10 5G.
+
+#### memeriksa missing value
+![mengecek missing velue](https://github.com/user-attachments/assets/3ad1e5fd-7cde-4160-8249-d28e6944e45b)
+
+Dari hasil diatas diketahui bahwa terdapat missing velue di 7 kolom yaitu corpus, storage_ram, os_processor, camera, display, network, dan battery.saya uraikan corpus untuk menangani jika terjadi data missing value dri tiap kriteria yang ada di corpus.
+
 ### Statistik Data
 Selanjutnya akan ditampilkan statistik data numerikal secara umum:
 | Statistik                | Nilai |
@@ -69,26 +83,6 @@ Tabel di atas memberikan informasi statistik pada masing-masing kolom, antara la
 Penjelasan:
 Dari tabel Data ratings menunjukkan distribusi yang cukup sempit dan condong ke arah nilai tinggi, yang mengindikasikan bahwa mayoritas pengguna memberikan penilaian positif terhadap item yang ada. Hal ini bisa menunjukkan kualitas produk/jasa yang baik atau bisa juga bias penilaian (rating bias).
 
-### Data Cleaning
-#### memeriksa data duplikasi
-![cek data duplicat](https://github.com/user-attachments/assets/74f14e89-b30c-4a1d-9756-1fe1f87fd5c2)
-
-Dari Hasil diatas terlihat bahwa ada 1 data yang mengalami duplikasi yaitu di baris ke 1696 dengan name OPPO Reno 10 5G.
-
-#### Menangani data duplikat
-![menangani data dupliat](https://github.com/user-attachments/assets/4011031c-7bb2-4e37-828e-528ac00f9b7b)
-
-Dari hasil diatas terlihat bahwa sudah dilakukan perbaikan dalam menangani data yang terduplikat.
-
-#### memeriksa missing value
-![mengecek missing velue](https://github.com/user-attachments/assets/3ad1e5fd-7cde-4160-8249-d28e6944e45b)
-
-Dari hasil diatas diketahui bahwa terdapat missing velue di 7 kolom yaitu corpus, storage_ram, os_processor, camera, display, network, dan battery.saya uraikan corpus untuk menangani jika terjadi data missing value dri tiap kriteria yang ada di corpus.
-
-#### Menangani missing velue
-![menangani missing velue](https://github.com/user-attachments/assets/b6c942ad-fa58-4288-9d91-90217a441ad2)
-
-Dari Hasil diatas terlihat bahwa sudah tidak ada missing velue karena sudah ditangani.
 
 ## Exploratory Data Analysis (EDA)
 ### Persebaran penggunaan smartphone berdasarkan nama smarphone dan rentang harga
@@ -161,6 +155,28 @@ Fitur-fitur teknis secara umum memiliki korelasi yang lebih jelas terhadap ratin
 
 
 ## Data Preparation
+### Data Cleaning
+#### Menangani data duplikat
+![menangani data dupliat](https://github.com/user-attachments/assets/4011031c-7bb2-4e37-828e-528ac00f9b7b)
+
+Dari hasil diatas terlihat bahwa sudah dilakukan perbaikan dalam menangani data yang terduplikat.
+
+#### Menangani missing velue
+![menangani missing velue](https://github.com/user-attachments/assets/b6c942ad-fa58-4288-9d91-90217a441ad2)
+
+Dari Hasil diatas terlihat bahwa sudah tidak ada missing velue karena sudah ditangani.
+
+### Pembersihan Kolom Price
+![menghapus price](https://github.com/user-attachments/assets/136362e5-aa23-40f4-adbe-06a665c41f8b)
+
+Dari hasil diatas menunjukan bahwa kolom price dengan simbol rupe dan koma dihapus dan mengonversi menjadi float.
+
+### Extract Kolom Corpus
+![Ekstract kolom corpus](https://github.com/user-attachments/assets/f074c2d9-24dd-4c97-bf3d-82659de67f3b)
+
+agar lebih mudah mengerti dataset maka kolom corpus dipisah menjadi 6 kolom yang terdiri dari storage_ram, os_processor, camera, display, network, dan battery tujuannya agar mudah mengecek apakah terjadi missing value, duplikasi, dan memudahkan visualisasi.
+
+### Perbedaan Antara Content-based filtering dengan Collaborative filtering
 Karena berbeda antara content-based filtering dengan collaborative filtering, maka data preparation dari kedua approach tersebut akan dilakukan secara masing-masing. Teknik Data preparation yang dilakukan terdiri dari:
 - TF-IDF Vectorizer 
 - Encoding Data User Rating
