@@ -27,7 +27,7 @@ Untuk mencapai tujuan di atas, pendekatan berikut akan digunakan dalam analisis 
  2. Mengimplementasikan content-based filtering approach menggunakan algoritma cosine similarity.
  3. Mengimplementasikan collaborative-based filtering approach menggunakan algoritma deep learning.
  4. Evaluasi Performa Model 
-  setelah model dibangun, evaluasi performa akan dilakukan menggunakan metrik seperti Precision dan Root Mean Squared Error. Ini akan memberikan wawasan tentang efektivitas model dalam merekomendasikan skincare yang relevan kepada pengguna.
+  setelah model dibangun, evaluasi performa akan dilakukan menggunakan metrik seperti Precision dan Root Mean Squared Error. Ini akan memberikan wawasan tentang efektivitas model dalam merekomendasikan smartphone yang relevan kepada pengguna.
 
 ## Data Understanding
 Dataset yang digunakan untuk membuat sistem rekomendasi smartphone pada responden diambil dari platform kaggle. Dataset dapat diakses pada link [berikut](https://www.kaggle.com/datasets/gyanprakashkushwaha/mobile-recommendation-system-dataset).
@@ -83,7 +83,7 @@ Dari hasil diatas terlihat bahwa sudah dilakukan perbaikan dalam menangani data 
 #### memeriksa missing value
 ![mengecek missing velue](https://github.com/user-attachments/assets/3ad1e5fd-7cde-4160-8249-d28e6944e45b)
 
-Dari hasil diatas diketahui bahwa terdapat missing velue di 7 kolom yaitu corpus, storage_ram, os_processor, camera, display, network, dan battery.
+Dari hasil diatas diketahui bahwa terdapat missing velue di 7 kolom yaitu corpus, storage_ram, os_processor, camera, display, network, dan battery.saya uraikan corpus untuk menangani jika terjadi data missing value dri tiap kriteria yang ada di corpus.
 
 #### Menangani missing velue
 ![menangani missing velue](https://github.com/user-attachments/assets/b6c942ad-fa58-4288-9d91-90217a441ad2)
@@ -101,7 +101,7 @@ Kesimpulan:
 - Untuk sistem rekomendasi atau strategi pemasaran, fokuskan pada model populer di rentang harga tersebut, dengan storage 64–128 GB, dari brand-brand teratas seperti Samsung, OPPO, dan OnePlus.
 - 
 ### Hubungan antara Rating vs RAM dan Storage
-![EDA2](https://github.com/user-attachments/assets/c046e8af-adab-4f11-a3a5-0d2376e63618)
+![EDA2](https://github.com/user-attachments/assets/f7390cfa-6ada-4ce5-aa10-caf0c39b935f)
 
 Penjelasan:
 1. RAM 4–8 GB paling umum dan cenderung mendapat rating ≥ 4.0, mencerminkan performa ideal.
@@ -140,9 +140,8 @@ Penjelasan:
 Korelasi paling tinggi pun tetap berada dalam kategori lemah, sehingga faktor lain seperti harga, brand, desain, dan pengalaman pengguna kemungkinan besar lebih menentukan dalam penilaian.
 
 ### Heatmap Korelasi Fitur Teknis vs Rating per Segmen Harga
-![EDA6](https://github.com/user-attachments/assets/73747517-685d-4562-b080-0f0d638453e1)
-![EDA7](https://github.com/user-attachments/assets/a560d8b4-eca3-456e-8f95-39d86b8ddb78)
-![EDA8](https://github.com/user-attachments/assets/7d16ca5a-3392-4b17-a0e4-13d9216429e7)
+
+![EDA6](https://github.com/user-attachments/assets/331021bd-c706-4989-8d26-f545734c5b04)
 
 Kesimpulan:
 1. Segmen Harga Low
@@ -202,7 +201,7 @@ Untuk collaborative filtering, kita juga akan fokus pada user_id, rating beserta
 * `track_name`
 * `Rating`
 
-Karena `user_id` dan `track_name` memiliki tipe data string dan unik, maka dilakukan encoding terhadap kedua kolom tersebut, kemudian dibentuk dataframe yang berisi kolom `user_id` yang sudah diencoding, kolom `track_name` yang sudah diencoding, dan `Rating`. Contoh dari dataframe dapat dilihat pada tabel berikut.
+Karena `user_id` dan `track_name` memiliki tipe data string dan unik, maka dilakukan encoding terhadap kedua kolom tersebut, kemudian dibentuk dataframe yang berisi kolom `user_id` yang sudah diencoding, kolom `track_name` yang sudah diencoding, dan `Ratings`. Contoh dari dataframe dapat dilihat pada tabel berikut.
 
 | **track** | **name** | **ratings** |
 | --------- | -------- | ----------- |
@@ -242,7 +241,7 @@ Content-based filtering menggunakan cosine similarity sebagai algoritma untuk me
 
 $$Cos (\theta) = \frac{\sum_1^n a_ib_i}{\sqrt{\sum_1^n a_i^2}\sqrt{\sum_1^n b_i^2}}$$
 
-Pada python, kita akan menggunakan  `cosine_similarity` untuk mendapatkan nilai cosinus dua vektor dalam matriks. Cosine similarity memiliki kelebihan seperti output yang ternormalisasi (rentang -1 hingga 1) sehingga memudahkan interpretasi, penggunaan yang mudah dan sederhana, serta efisien untuk data sparse berdimensi tinggi, seperti TF-IDF. Meski demikian, cosine similarity memiliki beberapa kelemahan, seperti menganggap seluruh faktor/parameter sama penting, sensitif terhadap perubahan 'sudut vektor', dan tidak selalu cocok untuk data negatif. Setelah dibentuk sistem rekomendasi, selanjutnya akan diuji sistem rekomendasi ini untuk menampilkan top 10 rekomendasi berdasarkan  yang category, skin type, ingredient oleh user. Diperoleh hasil berikut.
+Pada python, kita akan menggunakan  `cosine_similarity` untuk mendapatkan nilai cosinus dua vektor dalam matriks. Cosine similarity memiliki kelebihan seperti output yang ternormalisasi (rentang -1 hingga 1) sehingga memudahkan interpretasi, penggunaan yang mudah dan sederhana, serta efisien untuk data sparse berdimensi tinggi, seperti TF-IDF. Meski demikian, cosine similarity memiliki beberapa kelemahan, seperti menganggap seluruh faktor/parameter sama penting, sensitif terhadap perubahan 'sudut vektor', dan tidak selalu cocok untuk data negatif. Setelah dibentuk sistem rekomendasi, selanjutnya akan diuji sistem rekomendasi ini untuk menampilkan top 10 rekomendasi berdasarkan name, price, rating dan corpus oleh user. Diperoleh hasil berikut.
 
 `content_based_phone_recommendations('SAMSUNG Galaxy')`
 
@@ -261,7 +260,7 @@ Pada python, kita akan menggunakan  `cosine_similarity` untuk mendapatkan nilai 
 
 ### 2. Collaborative Filtering
 
-Collaborative Filtering menggunakan deep learning, tepatnya embedding layer untuk membuat model deep learning. Embedding layer merupakan tipe layer pada deep learning yang digunakan untuk mentransformasikan data kategorikal menjadi vektor dengan nilai kontinu. Pada python, kita menggunakan `tensorflow.keras.layers Embedding` untuk membentuk embedding layer. Embedding Layer memiliki kelebihan seperti mengurangi kompleksitas model, dapat digunakan di berbagai macam algoritma deep learning, dan menangkap hubungan semantic pada data. Meski demikian, embedding layer juga memiliki beberapa kelemahan, seperti membutuhkan data yang banyak, sensitif terhadap hyperparameter, dan cold start problem. Setelah model dibentuk dan dilatih, diperoleh hasil `root_mean_squared_error: 0.0037` untuk data training dan `val_root_mean_squared_error:  0.2310` untuk data testing. Nilai tersebut sudah bagus untuk digunakan dalam sistem rekomendasi, sehingga dapat dibentuk sistem rekomendasi berdasarkan model tersebut. Selanjutnya, akan diuji sistem rekomendasi ini untuk menampilkan top 10 rekomendasi smartphone berdasarkan  name.price,rating dan corpus. Diperoleh hasil berikut.
+Collaborative Filtering menggunakan deep learning, tepatnya embedding layer untuk membuat model deep learning. Embedding layer merupakan tipe layer pada deep learning yang digunakan untuk mentransformasikan data kategorikal menjadi vektor dengan nilai kontinu. Pada python, kita menggunakan `tensorflow.keras.layers Embedding` untuk membentuk embedding layer. Embedding Layer memiliki kelebihan seperti mengurangi kompleksitas model, dapat digunakan di berbagai macam algoritma deep learning, dan menangkap hubungan semantic pada data. Meski demikian, embedding layer juga memiliki beberapa kelemahan, seperti membutuhkan data yang banyak, sensitif terhadap hyperparameter, dan cold start problem. Setelah model dibentuk dan dilatih, diperoleh hasil `root_mean_squared_error: 0.0037` untuk data training dan `val_root_mean_squared_error:  0.2310` untuk data testing. Nilai tersebut sudah bagus untuk digunakan dalam sistem rekomendasi, sehingga dapat dibentuk sistem rekomendasi berdasarkan model tersebut. Selanjutnya, akan diuji sistem rekomendasi ini untuk menampilkan top 10 rekomendasi smartphone berdasarkan  name, price, rating dan corpus. Diperoleh hasil berikut.
 
 `recommend_tracks_based_on_track_name(('OPPO A78 5G (Glowing Black, 128 GB) | $18142.0 | Rating: 4.3'), top_n=10)`
 
@@ -291,7 +290,7 @@ Dimana:
 - TP (*True Positive*), jumlah kejadian positif yang diprediksi dengan benar.
 - FP (*False Positive*), jumlah kejadian positif yang diprediksi dengan salah.
 
-Berdasarkan hasil yang terdapat pada tahap Model and Result dapat dilihat bahwasanya besar presisi jika dihitung adalah 9/10 untuk rekomendasi Top-10. Ini menunjukan sistem mampu memberikan rekomendasi sesuai dengan Name,price,rating dan corpus.
+Berdasarkan hasil yang terdapat pada tahap Model and Result dapat dilihat bahwasanya besar presisi jika dihitung adalah 9/10 untuk rekomendasi Top-10. Ini menunjukan sistem mampu memberikan rekomendasi sesuai dengan name, price,rating dan corpus.
 
 
 ### 2. Collaborative Filtering

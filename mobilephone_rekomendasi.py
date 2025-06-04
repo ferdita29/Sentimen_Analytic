@@ -192,7 +192,7 @@ print("Jumlah data setelah menghapus duplikat:", data.shape[0])
 # Mengecek missing velue
 pd.DataFrame({'Nilai yang Kosong':data.isnull().sum()})
 
-"""Dari hasil diatas diketahui bahwa terdapat missing velue di 7 kolom yaitu corpus, storage_ram, os_processor, camera, display, network, dan battery."""
+"""Dari hasil diatas diketahui bahwa terdapat missing velue di 7 kolom yaitu corpus, storage_ram, os_processor, camera, display, network, dan battery.saya uraikan corpus untuk menangani jika terjadi data missing value dri tiap kriteria yang ada di corpus."""
 
 data = data.dropna()
 
@@ -268,9 +268,10 @@ display(df[['name', 'storage_gb', 'ram_gb', 'camera_mp', 'display_inch', 'batter
 ### Hubungan antara Rating vs RAM dan Storage
 """
 
-plt.figure(figsize=(6,4))
+plt.figure(figsize=(8,5))
 sns.scatterplot(data=df, x='ram_gb', y='ratings', hue='storage_gb', size='battery_mah', palette='coolwarm', sizes=(40, 160))
 plt.title('Rating vs RAM dan Storage')
+plt.legend(title='Spesifikasi', bbox_to_anchor=(1.05, 1), loc='upper left')
 plt.xlabel('RAM (GB)')
 plt.ylabel('Rating Pengguna')
 plt.tight_layout()
@@ -338,15 +339,52 @@ Korelasi paling tinggi pun tetap berada dalam kategori lemah, sehingga faktor la
 ### Heatmap Korelasi Fitur Teknis vs Rating per Segmen Harga
 """
 
+df = df.dropna(subset=['price'])
+
+# --- 2. Binning price menjadi Low, Mid, High
+try:
+    df['price_segment'] = pd.qcut(df['price'], q=3, labels=['Low', 'Mid', 'High'])
+except ValueError as e:
+    print(f"Error saat binning: {e}")
+
+# --- 3. Daftar fitur teknis
+features = ['storage_gb', 'ram_gb', 'camera_mp', 'display_inch', 'battery_mah']
+
+# --- 4. Hitung korelasi tiap fitur terhadap ratings, per segmen
+correlation_dict = {}
 for segment in ['Low', 'Mid', 'High']:
-    subset = df[df['price'] == segment]
-    plt.figure(figsize=(6, 4))
-    sns.heatmap(subset[['storage_gb', 'ram_gb', 'camera_mp', 'display_inch',
-                        'battery_mah', 'network_gen', 'ratings']].corr(),
-                annot=True, cmap='YlGnBu')
-    plt.title(f"Korelasi Fitur Teknis vs Rating - Harga {segment}")
-    plt.tight_layout()
-    plt.show()
+    subset = df[df['price_segment'] == segment]
+    subset_clean = subset[features + ['ratings']].dropna()
+
+    correlations = []
+    for feature in features:
+        if subset_clean[feature].nunique() < 2 or subset_clean['ratings'].nunique() < 2:
+            correlations.append(float('nan'))
+        else:
+            corr = subset_clean[feature].corr(subset_clean['ratings'])
+            correlations.append(corr)
+
+    correlation_dict[segment] = correlations
+
+# --- 5. Buat DataFrame korelasi dengan index=features dan columns=segments,
+#     lalu transpose agar index=segments dan columns=features
+correlation_df = pd.DataFrame(correlation_dict, index=features).T
+
+# --- 6. Plot heatmap: X-axis = fitur teknis, Y-axis = segmen harga
+plt.figure(figsize=(8, 4))
+sns.heatmap(
+    correlation_df,
+    annot=True,
+    fmt=".2f",
+    cmap='coolwarm',
+    center=0,
+    cbar_kws={'label': 'Korelasi'}
+)
+plt.xlabel('Fitur Teknis')
+plt.ylabel('Segmen Harga')
+plt.title('Korelasi Fitur Teknis vs Ratings per Segmen Harga')
+plt.tight_layout()
+plt.show()
 
 """Kesimpulan:
 1. Segmen Harga Low
