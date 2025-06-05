@@ -30,7 +30,7 @@ Proyek ini bertujuan untuk membangun sistem rekomendasi smartphone berbasis data
 1. Mengetahui persebaran dan popularitas smartphone berdasarkan merek dan segmen harga yang paling diminati pengguna.
 2. Menganalisis performa smartphone dengan memvisualisasikan hubungan antara fitur teknis dan rating pengguna.
 3. Mengevaluasi pengaruh spesifikasi teknis smartphone terhadap rating di berbagai kategori harga menggunakan visualisasi seperti heatmap dan scatterplot.
-4. Mengembangkan sistem rekomendasi smartphone menggunakan algoritma content-based filtering dan collaborative filtering, serta mengevaluasi performanya dengan metrik akurasi yang sesuai.
+4. Mengembangkan sistem rekomendasi smartphone menggunakan algoritma content-based filtering dan collaborative filtering serta mengevaluasi performanya dengan metrik akurasi yang sesuai.
 
 ## 🛠️ **Solution Approach**
 Untuk mencapai tujuan di atas, pendekatan berikut akan digunakan dalam analisis dan pengembangan sistem rekomendasi smartphone:
@@ -64,8 +64,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics import ConfusionMatrixDisplay, accuracy_score, classification_report
 
 #membuka zip menjadi folder
-with zipfile.ZipFile("/content/archive.zip", "r") as zip_ref:
-    zip_ref.extractall("dataset")
+ with zipfile.ZipFile("/content/archive.zip", "r") as zip_ref:
+  zip_ref.extractall("dataset")
 
 
 #membaca csv dalam folder
@@ -78,13 +78,14 @@ data.head()
 
 Berikut adalag arti dari variabel-variabel dataset diatas
 
-| **Nama Variabel** | **Tipe Data**    | **Deskripsi**                                                                                                                                                             |
-| ----------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `name`            | `String`         | Nama lengkap smartphone, termasuk merk, model, varian warna, dan kapasitas memori.                                                                                        |
-| `ratings`         | `Float`          | Nilai rata-rata ulasan pengguna (range 1–5), menunjukkan tingkat kepuasan terhadap produk.                                                                                |
-| `price`           | `Integer/String` | Harga smartphone. Perlu dibersihkan dari simbol mata uang seperti `₹` untuk dianalisis secara numerik.                                                                    |
-| `imgURL`          | `String (URL)`   | URL gambar produk dari e-commerce. Umumnya digunakan untuk visualisasi atau aplikasi berbasis antarmuka.                                                                  |
-| `corpus`          | `String`         | Deskripsi gabungan dari spesifikasi teknis: RAM, ROM, sistem operasi, prosesor, dan fitur lainnya. Digunakan sebagai fitur untuk pemrosesan teks atau sistem rekomendasi. |
+| **Nama Variabel** | **Tipe Data**  | **Deskripsi**                                                                             |
+| ----------------- | -------------- | ----------------------------------------------------------------------------------------- |
+| `name`            | String         | Nama lengkap smartphone beserta varian warna dan kapasitas penyimpanan.                   |
+| `ratings`         | Float          | Nilai rating pengguna terhadap smartphone, biasanya dalam skala 1 hingga 5.               |
+| `price`           | Integer/String | Harga smartphone. Perlu dibersihkan jika menggunakan simbol mata uang (misalnya `₹`).     |
+| `imgURL`          | String (URL)   | Tautan gambar produk dari situs e-commerce.                                               |
+| `corpus`          | String         | Deskripsi spesifikasi teknis (storage, RAM, OS, prosesor, kamera, dll) dalam bentuk teks. |
+| `user_id`         | String         | ID unik pengguna atau penanda entri smartphone di dataset.                                |
 """
 
 data.info()
@@ -94,7 +95,7 @@ total_row, total_column = data.shape
 print(f"Total of rows: {total_row}")
 print(f"Total of column: {total_column}")
 
-"""Dapat dilihat bahwa data yang digunakan adalah sebanyak 2546 data dengan 5 fitur dengan terdapat 1 variabel bertipe `float64`, 4 variabel bertipe `object`.
+"""Dapat dilihat bahwa data yang digunakan adalah sebanyak 2546 data dengan 6 fitur dengan terdapat 1 variabel bertipe `float64`, 5 variabel bertipe `object`.
 
 ### Statistik Deskripsi dari Data
 """
@@ -167,7 +168,7 @@ data['battery'] = data['corpus'].apply(extract_battery)
 # Tampilkan hasil dalam bentuk tabel (bukan print biasa)
 display(data[['name', 'storage_ram', 'os_processor', 'camera', 'display', 'network', 'battery']].head(5))
 
-"""agar lebih mudah mengerti dataset maka corpus dipisah agar dapat mengecek apakah terjadi missing value, duplikasi, dan memudahkan visualisasi"""
+"""agar lebih mudah mengerti dataset maka kolom corpus dipisah menjadi 6 kolom yang terdiri dari storage_ram, os_processor, camera, display, network, dan battery tujuannya agar mudah mengecek apakah terjadi missing value, duplikasi, dan memudahkan visualisasi."""
 
 # Menampilkan data duplikat
 data[data.duplicated]
@@ -179,15 +180,7 @@ print("Jumlah data sebelum menghapus duplikat:", data.shape[0])
 duplicates = data[data.duplicated()]
 print(f"Jumlah baris duplikat: {duplicates.shape[0]}")
 
-"""Dari Hasil diatas terlihat bahwa ada 1 data yang mengalami duplikasi yaitu di baris ke 1696 dengan name OPPO Reno 10 5G."""
-
-# Hapus duplikat
-data= data.drop_duplicates()
-
-# Cek jumlah data setelah menghapus duplikat
-print("Jumlah data setelah menghapus duplikat:", data.shape[0])
-
-"""Dari hasil diatas terlihat bahwa sudah dilakukan perbaikan dalam menangani data yang terduplikat."""
+"""Dari Hasil diatas terlihat bahwa tidak ada data yang terduplikasi."""
 
 # Mengecek missing velue
 pd.DataFrame({'Nilai yang Kosong':data.isnull().sum()})
@@ -205,7 +198,7 @@ pd.DataFrame({'Nilai yang Kosong':data.isnull().sum()})
 
 data.shape
 
-"""code diatas menunjukan bahwa dataset yang sudah di lakukan proses cleaning data ada 1970 data dan 11 kolom.
+"""code diatas menunjukan bahwa dataset yang sudah di lakukan proses cleaning data ada 1971 data dan 12 kolom.
 
 # **Exploratory Data Analysis (EDA)**
 
@@ -236,9 +229,10 @@ plt.show()
 
 """Kesimpulan:
 - Brand dan harga adalah dua faktor utama dalam keputusan pembelian smartphone.
-- Samsung dan OPPO tampil sebagai brand paling banyak dipilih di berbagai rentang harga.
+- SAMSUNG dan OPPO tampil sebagai brand paling banyak dipilih di berbagai rentang harga.
 - Rentang harga menengah (sekitar 10K–30K) adalah segmen pasar paling kompetitif dan diminati.
-- Untuk sistem rekomendasi atau strategi pemasaran, fokuskan pada model populer di rentang harga tersebut, dengan storage 64–128 GB, dari brand-brand teratas seperti Samsung, OPPO, dan OnePlus.
+- Untuk sistem rekomendasi atau strategi pemasaran, fokuskan pada model populer di rentang harga tersebut, dengan storage 64–128 GB, dari brand-brand teratas seperti SAMSUNG, OPPO, ONEPlus.
+
 """
 
 # Salin dulu data asli
@@ -432,7 +426,7 @@ name, price, ratings, dan corpus.
  - Harga,
  - Rating,
 menjadi satu string representatif seperti:
-"REDMI Note 12 Pro 5G (Onyx Black, 128 GB) | $23999.0 | Rating: 4.2".
+"REDMI Note 12 Pro 5G (Onyx Black, 128 GB) | 23999.0 | Rating: 4.2".
  - dan Corpus.
 4. Kolom brand_product ini akan digunakan sebagai identitas utama untuk pencocokan dan pemanggilan rekomendasi produk serupa.
 
@@ -507,7 +501,7 @@ tfidf_matrix.todense()
 Kode ini mengubah matriks TF-IDF yang awalnya dalam format sparse matrix menjadi matriks padat (dense matrix) menggunakan fungsi todense(). Ini memudahkan visualisasi dan manipulasi data dalam bentuk array lengkap, meskipun bisa memakan lebih banyak memori terutama untuk dataset besar.
 """
 
-# Membentuk tabel dari nama corpus beserta kolom yang berisi  category,ingredient,skin type berdasarkan tfidf
+# Membentuk tabel dari nama corpus beserta kolom yang berisi brand_product berdasarkan tfidf
 pd.DataFrame(
     tfidf_matrix.todense(),
     columns = tf.get_feature_names_out(),
@@ -519,6 +513,8 @@ pd.DataFrame(
 Kode ini membentuk DataFrame dari matriks TF-IDF dengan baris-baris yang mewakili setiap produk (berdasarkan brand_product) dan kolom-kolom yang merepresentasikan kata-kata unik (fitur) dalam teks. DataFrame ini menunjukkan bobot TF-IDF untuk setiap kata pada masing-masing produk, yang dapat digunakan untuk menganalisis kemiripan berdasarkan kategori, bahan (ingredient), dan jenis kulit (skin type). Ini menjadi dasar penting dalam penerapan content-based filtering.
 
 ## B. Model and Result
+
+Untuk menentukan content-based filtering, pada proyek ini digunakan cosine similarity untuk mencari kemiripan produk dan brand.
 """
 
 # Menghitung cosine similarity pada matrix tf-idf
@@ -571,17 +567,9 @@ content_based_data[content_based_data.brand_product.eq('SAMSUNG Galaxy M04 (Ligh
 
 content_based_phone_recommendations('SAMSUNG Galaxy')
 
-"""Kesimpulan:
-1. Brand Awareness Tinggi
-Produk dengan nama "SAMSUNG" cukup banyak muncul, menunjukkan bahwa merek ini memiliki varian produk yang luas dan dominan di pasaran.
-2. Ragam Harga
-Produk Samsung tersebar di berbagai tingkatan harga, dari entry-level hingga high-end. Ini menunjukkan strategi segmentasi pasar yang kuat.
-3. Rating Konsisten
-Banyak produk Samsung yang memiliki rating pengguna ≥ 4.0, menunjukkan konsistensi kualitas dan kepuasan pelanggan.
-4. Kombinasi Spesifikasi dan Merek
-Meski beberapa spesifikasi bisa setara dengan brand lain, nama besar Samsung tampaknya tetap memengaruhi persepsi pengguna dan memberi keunggulan dalam rating dan kepercayaan.
+"""penjelasan:
 
-Hasil pencarian ini dapat digunakan sebagai basis awal untuk memberikan rekomendasi produk serupa, terutama dalam sistem content-based recommendation.
+dari hasil rekomendasi berdasarkan name, price, ratings, dan corpus berhasil memberikan rekomendasi sesuai sebanyak 9 rekomendasi dan tidak sesuai 1 rekomendasi.
 
 # **Collaborative Based Filtering**
 
@@ -592,7 +580,7 @@ Hasil pencarian ini dapat digunakan sebagai basis awal untuk memberikan rekomend
 dataset_content = data.drop(columns=[ 'imgURL'])
 
 # Membuat dataset_content dengan hanya menyimpan kolom yang diperlukan
-dataset_filtering = data[["name", "price", "ratings", "corpus"]].copy()
+dataset_filtering = data[["name", "price", "ratings", "corpus", "user_id"]].copy()
 
 # Membuat kolom gabungan untuk keperluan rekomendasi/representasi (misalnya untuk TF-IDF)
 # Misalnya kamu ingin menyatukan informasi untuk keperluan tampilan atau pencarian
@@ -601,35 +589,15 @@ dataset_filtering["brand_product"] = data["name"].astype(str) + " | $" + data["p
 # Menampilkan 5 data teratas
 dataset_filtering.head()
 
-"""🔍 Kesimpulan
-1. Tujuan utama preprocessing adalah menyederhanakan dan menyiapkan data agar dapat digunakan dalam sistem rekomendasi berbasis konten.
-2. Dataset telah difilter menjadi dataset_content yang hanya berisi kolom penting:
-name, price, ratings, dan corpus.
-3. Dibuat kolom gabungan baru brand_product yang menggabungkan:
- - Nama produk,
- - Harga,
- - Rating,
-menjadi satu string representatif seperti:
-"REDMI Note 12 Pro 5G (Onyx Black, 128 GB) | $23999.0 | Rating: 4.2".
- - dan Corpus.
-4. Kolom brand_product ini akan digunakan sebagai identitas utama untuk pencocokan dan pemanggilan rekomendasi produk serupa.
+"""🔍 Kesimpulan:
 
-Hasil akhir dari preprocessing ini memungkinkan sistem rekomendasi menampilkan produk-produk HP yang mirip, baik berdasarkan nama, harga, maupun rating-nya, secara relevan dan mudah dibaca.
+Dataset dataset_filtering telah disiapkan dengan struktur yang rapi dan informatif, mencakup nama, harga, rating, fitur teknis (corpus), dan ID unik (user_id). Kolom tambahan brand_product memudahkan dalam tampilan dan pencarian. Dataset ini siap digunakan untuk analisis performa smartphone serta pembangunan sistem rekomendasi.
 
 
 """
 
-# Create the "product_id" column
-dataset_filtering['product_id'] = dataset_filtering['brand_product'].apply(lambda x: x.split()[0][:3].upper()) + data.index.astype(str)
-dataset_filtering.head()
-
-"""penjelasan:
-
-Kolom product_id dibuat untuk tiap produk dengan mengambil tiga huruf depan produk dan index dari produk tersebut.
-"""
-
-# Mengubah product_id menjadi list tanpa nilai yang sama
-track_ids = dataset_filtering["product_id"].unique().tolist()
+# Mengubah user_id menjadi list tanpa nilai yang sama
+track_ids = dataset_filtering["user_id"].unique().tolist()
 print("list track_id: ", track_ids)
 
 # Melakukan encoding terhadap track_id
@@ -641,7 +609,7 @@ track_encoded_to_track = {i: x for i, x in enumerate(track_ids)}
 print("encoded angka ke track_id: ", track_encoded_to_track)
 
 """Kesimpulan:
-1. Proses encoding product_id menjadi angka numerik berhasil dilakukan secara sistematis dan efisien.
+1. Proses encoding user_id menjadi angka numerik berhasil dilakukan secara sistematis dan efisien.
 2. Ini merupakan tahapan penting dalam sistem rekomendasi, karena banyak algoritma (seperti cosine similarity atau matrix factorization) membutuhkan data dalam bentuk numerik.
 3. Adanya dua arah mapping (id → angka dan angka → id) memudahkan konversi saat interpretasi hasil rekomendasi nanti.
 
@@ -668,14 +636,14 @@ print("encoded track_id : ", name_encoded_to_name)
 """
 
 # Mapping track_id ke dataframe track
-dataset_filtering["track"] = dataset_filtering["product_id"].map(track_to_track_encoded)
+dataset_filtering["track"] = dataset_filtering["user_id"].map(track_to_track_encoded)
 
 # Mapping track_name ke dataframe name
 dataset_filtering["name"] = dataset_filtering["brand_product"].map(name_to_name_encoded)
 
 """Kesimpulan:
 
-Proses mapping product_id dan brand_product ke bentuk numerik (track dan name) membuat data lebih efisien untuk diproses oleh sistem rekomendasi. Ini membantu komputasi lebih cepat, konsisten, dan siap digunakan dalam analisis atau model machine learning.
+Proses mapping user_id dan brand_product ke bentuk numerik (track dan name) membuat data lebih efisien untuk diproses oleh sistem rekomendasi. Ini membantu komputasi lebih cepat, konsisten, dan siap digunakan dalam analisis atau model machine learning.
 
 """
 
@@ -699,7 +667,7 @@ print("Number of Track ID: {}, Number of Track Name: {}, Min popularity: {}, Max
 
 """Penjelasan:
 
-1. Dataset memiliki 1970 Track ID dan 1943 Track Name.
+1. Dataset memiliki 1971 Track ID dan 1943 Track Name.
 2. Ini menunjukkan kemungkinan ada beberapa track yang memiliki lebih dari satu ID atau redundansi dalam pengkodean ID.
 3. Nilai rating atau popularitas berada pada rentang 2.9 (minimum) hingga 4.8 (maksimum).
 4. Rentang nilai ini bisa menandakan bahwa data rating cenderung positif, karena nilai minimum tidak terlalu rendah.
@@ -808,7 +776,7 @@ history = model.fit(
     x = x_train,
     y = y_train,
     batch_size = 32,
-    epochs = 35,
+    epochs = 50,
     validation_data = (x_val, y_val)
 )
 
@@ -854,19 +822,19 @@ def recommend_tracks_based_on_track_name(track_name, top_n = 10):
     recommended_encoded_track_ids = [all_track_ids[x] for x in top_popularity_indices]
 
     # Mapping ID track yang sudah di encoding ke dataset awal
-    recommended_track_ids = [track_encoded_to_track.get(product_id) for product_id in recommended_encoded_track_ids]
+    recommended_track_ids = [track_encoded_to_track.get(user_id) for user_id in recommended_encoded_track_ids]
 
     # Menampilkan Top-N rekomendasi berdasarkan nama track
     print(f"Rekomendasi berdasarkan track dengan brand dan produk: '{track_name}'")
     print("10 Rekomendasi smartphone yang cocok untuk kamu:")
-    for product_id in recommended_track_ids:
-        if product_id is not None:
+    for user_id in recommended_track_ids:
+        if user_id is not None:
             # Output the actual track name
-            track_info = dataset_filtering[dataset_filtering["product_id"] == product_id]
+            track_info = dataset_filtering[dataset_filtering["user_id"] == user_id]
             if not track_info.empty:
                 print(f" produk {track_info['brand_product'].values[0]} dengan spesifikasi {track_info['corpus'].values[0]} dan rating {track_info['ratings'].values[0]}")
             else:
-                print(f"ID Track '{product_id}' tidak ada di dalam dataset.")
+                print(f"ID Track '{user_id}' tidak ada di dalam dataset.")
 
 dataset_filtering[dataset_filtering.brand_product.eq('OPPO A78 5G (Glowing Black, 128 GB) | $18142.0 | Rating: 4.3')]
 
